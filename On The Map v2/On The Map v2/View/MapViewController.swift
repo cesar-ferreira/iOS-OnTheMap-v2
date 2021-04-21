@@ -122,15 +122,17 @@ extension MapViewController: TabBarViewModelProtocol {
 
 extension MapViewController: MKMapViewDelegate {
 
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-
-        let app = UIApplication.shared
-        if let toOpen = view.annotation?.subtitle! {
-            app.canOpenURL(URL(string: toOpen)!)
-                ? app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
-                : self.alertError(message: "User has no associated link")
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        if control == view.rightCalloutAccessoryView {
+            let app = UIApplication.shared
+            if let toOpen = view.annotation?.subtitle! {
+                app.canOpenURL(URL(string: toOpen)!)
+                    ? app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
+                    : self.alertError(message: "User has no associated link")
+            }
         }
     }
+
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 

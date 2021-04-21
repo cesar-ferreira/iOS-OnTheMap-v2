@@ -13,7 +13,9 @@ class AddLinkViewController: UIViewController {
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var linkTextField: UITextField!
-
+    @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    
     private let viewModel = AddLinkViewModel()
 
     private var currentUser: UserInformation?
@@ -64,7 +66,14 @@ class AddLinkViewController: UIViewController {
                                      attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
     }
 
+    private func loading(isLoading: Bool) {
+        self.loadingView.isHidden = !isLoading
+        self.loadingIndicator.isHidden = !isLoading
+        isLoading ? self.loadingIndicator.startAnimating() : self.loadingIndicator.stopAnimating()
+    }
+
     @IBAction func submitButtonTapped(_ sender: Any) {
+        self.loading(isLoading: true)
 
         let submitStudent = Student(
             firstName: self.currentUser?.firstName,
@@ -134,6 +143,8 @@ extension AddLinkViewController: AddLinkViewModelProtocol {
     }
 
     func didStudentPosted() {
+        self.loading(isLoading: false)
+
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "TabBarViewController") as! TabBarViewController
         newViewController.modalPresentationStyle = .fullScreen

@@ -12,7 +12,9 @@ class AddLocationViewController: UIViewController {
 
     @IBOutlet weak var locationTextField: UITextField!
     @IBOutlet weak var addLocationButton: UIButton!
-
+    @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupUI()
@@ -44,11 +46,13 @@ class AddLocationViewController: UIViewController {
     }
 
     private func searchLocation() {
-
+        self.loading(isLoading: true)
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = self.locationTextField.text ?? ""
         let search = MKLocalSearch(request: request)
         search.start { [self] response, _ in
+            self.loading(isLoading: false)
+
             guard let response = response else {
                 alertError(message: "Location not found")
                 return
@@ -63,6 +67,12 @@ class AddLocationViewController: UIViewController {
             newViewController.location = locationTextField.text ?? ""
             self.present(newViewController, animated: true, completion: nil)
         }
+    }
+
+    private func loading(isLoading: Bool) {
+        self.loadingView.isHidden = !isLoading
+        self.loadingIndicator.isHidden = !isLoading
+        isLoading ? self.loadingIndicator.startAnimating() : self.loadingIndicator.stopAnimating()
     }
 
     private func alertError(message: String) {

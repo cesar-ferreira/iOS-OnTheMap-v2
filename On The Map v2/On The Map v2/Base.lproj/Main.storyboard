@@ -360,19 +360,38 @@
                                     </view>
                                 </subviews>
                             </stackView>
+                            <view hidden="YES" alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zn5-8t-uWI">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
+                                <subviews>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="KEb-Aa-idA">
+                                        <rect key="frame" x="197" y="421" width="20" height="20"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                <constraints>
+                                    <constraint firstItem="KEb-Aa-idA" firstAttribute="centerX" secondItem="Zn5-8t-uWI" secondAttribute="centerX" id="k5R-y1-DCY"/>
+                                    <constraint firstItem="KEb-Aa-idA" firstAttribute="centerY" secondItem="Zn5-8t-uWI" secondAttribute="centerY" id="rso-sh-093"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="3pv-5M-aD9"/>
                         <color key="backgroundColor" systemColor="systemGray5Color"/>
                         <constraints>
+                            <constraint firstItem="Zn5-8t-uWI" firstAttribute="top" secondItem="XhH-eg-FYj" secondAttribute="top" id="B1n-qk-zhm"/>
                             <constraint firstItem="ykN-Dl-8hN" firstAttribute="bottom" secondItem="3pv-5M-aD9" secondAttribute="bottom" id="JUt-Ke-PdU"/>
                             <constraint firstItem="ykN-Dl-8hN" firstAttribute="trailing" secondItem="3pv-5M-aD9" secondAttribute="trailing" id="KWE-9F-ucK"/>
                             <constraint firstItem="ykN-Dl-8hN" firstAttribute="top" secondItem="3pv-5M-aD9" secondAttribute="top" id="ODT-Hx-gf7"/>
+                            <constraint firstItem="Zn5-8t-uWI" firstAttribute="trailing" secondItem="3pv-5M-aD9" secondAttribute="trailing" id="Olw-8L-hFs"/>
+                            <constraint firstItem="Zn5-8t-uWI" firstAttribute="leading" secondItem="3pv-5M-aD9" secondAttribute="leading" id="XW9-XI-cbN"/>
                             <constraint firstItem="ykN-Dl-8hN" firstAttribute="leading" secondItem="3pv-5M-aD9" secondAttribute="leading" id="ass-5k-Mxc"/>
+                            <constraint firstItem="3pv-5M-aD9" firstAttribute="bottom" secondItem="Zn5-8t-uWI" secondAttribute="bottom" id="oam-Dz-cSz"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="b7A-Y0-7pK"/>
                     <connections>
                         <outlet property="addLocationButton" destination="suq-AX-YHb" id="1ds-2L-251"/>
+                        <outlet property="loadingIndicator" destination="KEb-Aa-idA" id="r4K-qK-xt2"/>
+                        <outlet property="loadingView" destination="Zn5-8t-uWI" id="8SU-yb-FWq"/>
                         <outlet property="locationTextField" destination="nUy-Q9-EXI" id="sDm-e5-aUf"/>
                     </connections>
                 </viewController>
@@ -456,19 +475,38 @@
                                     </view>
                                 </subviews>
                             </stackView>
+                            <view hidden="YES" alpha="0.80000001192092896" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3io-dP-Edd">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="3CS-Dh-NlM">
+                                        <rect key="frame" x="197" y="438" width="20" height="20"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                <constraints>
+                                    <constraint firstItem="3CS-Dh-NlM" firstAttribute="centerY" secondItem="3io-dP-Edd" secondAttribute="centerY" id="nUv-wP-Fen"/>
+                                    <constraint firstItem="3CS-Dh-NlM" firstAttribute="centerX" secondItem="3io-dP-Edd" secondAttribute="centerX" id="yXP-0M-XYM"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Nb2-7Z-8JY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="3io-dP-Edd" secondAttribute="bottom" id="1le-dC-Id6"/>
                             <constraint firstItem="uqg-ya-6o3" firstAttribute="leading" secondItem="Nb2-7Z-8JY" secondAttribute="leading" id="D05-o5-arT"/>
+                            <constraint firstItem="3io-dP-Edd" firstAttribute="top" secondItem="Hbw-GX-cAU" secondAttribute="top" id="SSE-ND-azK"/>
                             <constraint firstItem="uqg-ya-6o3" firstAttribute="trailing" secondItem="Nb2-7Z-8JY" secondAttribute="trailing" id="X75-GY-1YB"/>
+                            <constraint firstItem="3io-dP-Edd" firstAttribute="trailing" secondItem="Nb2-7Z-8JY" secondAttribute="trailing" id="fpd-31-M4g"/>
                             <constraint firstItem="uqg-ya-6o3" firstAttribute="top" secondItem="Nb2-7Z-8JY" secondAttribute="top" id="hnr-Ig-rkz"/>
                             <constraint firstItem="Nb2-7Z-8JY" firstAttribute="bottom" secondItem="uqg-ya-6o3" secondAttribute="bottom" id="qGC-N4-XET"/>
+                            <constraint firstItem="3io-dP-Edd" firstAttribute="leading" secondItem="Nb2-7Z-8JY" secondAttribute="leading" id="zSr-h9-qbz"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="D7H-cU-yIv"/>
                     <connections>
                         <outlet property="linkTextField" destination="MfJ-FS-cTe" id="wmq-Yv-o5m"/>
+                        <outlet property="loadingIndicator" destination="3CS-Dh-NlM" id="ntO-5A-FdC"/>
+                        <outlet property="loadingView" destination="3io-dP-Edd" id="jjk-FG-Wa4"/>
                         <outlet property="mapView" destination="SEf-4T-wnk" id="k0b-Jl-S8V"/>
                         <outlet property="submitButton" destination="68j-r1-D7q" id="mmj-cz-8km"/>
                     </connections>

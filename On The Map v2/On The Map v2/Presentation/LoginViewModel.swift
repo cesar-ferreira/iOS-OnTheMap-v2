@@ -39,6 +39,9 @@ class LoginViewModel {
         let task = session.dataTask(with: request) { data, response, error in
 
             if error != nil {
+                DispatchQueue.main.async {
+                    self.delegate?.didError(message: error?.localizedDescription ?? "Error")
+                }
                 return
             }
 

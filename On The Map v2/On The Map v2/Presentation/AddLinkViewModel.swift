@@ -24,7 +24,7 @@ class AddLinkViewModel {
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil {
                 DispatchQueue.main.async {
-                    self.delegate?.didError(message: error.debugDescription)
+                    self.delegate?.didError(message: error?.localizedDescription ?? "Error")
                 }
                 return
             }
@@ -66,7 +66,7 @@ class AddLinkViewModel {
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil {
                 DispatchQueue.main.async {
-                    self.delegate?.didError(message: error.debugDescription)
+                    self.delegate?.didError(message: error?.localizedDescription ?? "Error")
                 }
                 return
             }

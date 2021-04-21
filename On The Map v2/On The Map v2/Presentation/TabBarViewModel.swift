@@ -32,6 +32,9 @@ class TabBarViewModel {
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil {
+                DispatchQueue.main.async {
+                    self.delegate?.didError(message: error?.localizedDescription ?? "Error")
+                }
                 return
             }
             let range: Range = 5..<data!.count
@@ -50,7 +53,7 @@ class TabBarViewModel {
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil {
                 DispatchQueue.main.async {
-                    self.delegate?.didError(message: error.debugDescription)
+                    self.delegate?.didError(message: error?.localizedDescription ?? "Error")
                 }
                 return
             }
