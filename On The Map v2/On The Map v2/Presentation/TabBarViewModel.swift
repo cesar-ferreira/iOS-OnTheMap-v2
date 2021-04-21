@@ -11,6 +11,7 @@ import UIKit
 protocol TabBarViewModelProtocol: class {
     func didLogout()
     func getStudents(result: StudentResponse)
+    func didError(message: String)
 }
 
 class TabBarViewModel {
@@ -30,7 +31,7 @@ class TabBarViewModel {
         }
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error…
+            if error != nil {
                 return
             }
             let range: Range = 5..<data!.count
@@ -44,10 +45,13 @@ class TabBarViewModel {
     }
 
     func getStudents(uniqueKey: String?) {
-        var request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?order=-updatedAt")!)
+        var request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?order=-updatedAt?limit=100")!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error...
+            if error != nil {
+                DispatchQueue.main.async {
+                    self.delegate?.didError(message: error.debugDescription)
+                }
                 return
             }
             print(String(data: data!, encoding: .utf8)!)
@@ -59,7 +63,14 @@ class TabBarViewModel {
                 }
 
             } catch {
-                print("Error Parse")
+                do {
+                    let results = try JSONDecoder().decode(ErrorResponse.self, from: data!)
+                    DispatchQueue.main.async {
+                        self.delegate?.didError(message: results.error)
+                    }
+                } catch {
+                    print("Error Parse")
+                }
             }
         }
         task.resume()

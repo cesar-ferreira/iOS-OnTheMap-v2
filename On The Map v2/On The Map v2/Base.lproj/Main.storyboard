@@ -340,7 +340,7 @@
                                         <rect key="frame" x="0.0" y="516" width="414" height="258"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="suq-AX-YHb">
-                                                <rect key="frame" x="48" y="109.5" width="318" height="39"/>
+                                                <rect key="frame" x="48" y="48" width="318" height="39"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                 <state key="normal" title="Find on the map">
@@ -353,10 +353,9 @@
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemGray5Color"/>
                                         <constraints>
-                                            <constraint firstItem="suq-AX-YHb" firstAttribute="leading" secondItem="xVF-sv-riv" secondAttribute="leading" constant="48" id="BnQ-qm-QtY"/>
-                                            <constraint firstItem="suq-AX-YHb" firstAttribute="centerX" secondItem="xVF-sv-riv" secondAttribute="centerX" id="faW-2g-3lw"/>
-                                            <constraint firstAttribute="trailing" secondItem="suq-AX-YHb" secondAttribute="trailing" constant="48" id="hlg-Xl-9Ra"/>
-                                            <constraint firstItem="suq-AX-YHb" firstAttribute="centerY" secondItem="xVF-sv-riv" secondAttribute="centerY" id="vYg-g5-88H"/>
+                                            <constraint firstAttribute="trailing" secondItem="suq-AX-YHb" secondAttribute="trailing" constant="48" id="MLy-yy-ktc"/>
+                                            <constraint firstItem="suq-AX-YHb" firstAttribute="top" secondItem="xVF-sv-riv" secondAttribute="top" constant="48" id="N9V-9n-zAT"/>
+                                            <constraint firstItem="suq-AX-YHb" firstAttribute="leading" secondItem="xVF-sv-riv" secondAttribute="leading" constant="48" id="Ngd-oE-IEe"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -431,7 +430,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="524"/>
                                             </mapView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="68j-r1-D7q">
-                                                <rect key="frame" x="157" y="242.5" width="100" height="39"/>
+                                                <rect key="frame" x="157" y="48" width="100" height="39"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="YRj-Gb-Mrn"/>
@@ -449,9 +448,9 @@
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="SEf-4T-wnk" secondAttribute="bottom" id="3O7-gA-eg9"/>
                                             <constraint firstAttribute="trailing" secondItem="SEf-4T-wnk" secondAttribute="trailing" id="dXm-eu-6HJ"/>
-                                            <constraint firstItem="68j-r1-D7q" firstAttribute="centerX" secondItem="k30-pM-xaS" secondAttribute="centerX" id="q1F-cK-7mb"/>
+                                            <constraint firstItem="68j-r1-D7q" firstAttribute="centerX" secondItem="k30-pM-xaS" secondAttribute="centerX" id="dYm-Gh-25T"/>
+                                            <constraint firstItem="68j-r1-D7q" firstAttribute="top" secondItem="k30-pM-xaS" secondAttribute="top" constant="48" id="m5r-rz-XmP"/>
                                             <constraint firstItem="SEf-4T-wnk" firstAttribute="leading" secondItem="k30-pM-xaS" secondAttribute="leading" id="rAy-SS-yNF"/>
-                                            <constraint firstItem="68j-r1-D7q" firstAttribute="centerY" secondItem="k30-pM-xaS" secondAttribute="centerY" id="xgQ-1q-xif"/>
                                             <constraint firstItem="SEf-4T-wnk" firstAttribute="top" secondItem="k30-pM-xaS" secondAttribute="top" id="zCZ-Nb-U06"/>
                                         </constraints>
                                     </view>

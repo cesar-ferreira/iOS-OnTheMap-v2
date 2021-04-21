@@ -20,39 +20,40 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewModel.delegate = self
-        mapView.delegate = self
+        self.viewModel.delegate = self
+        self.mapView.delegate = self
 
-        setupNavigationBar()
-        getUser()
+        self.setupNavigationBar()
+        self.getUser()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        getUser()
+        super.viewWillAppear(animated)
+        self.getUser()
     }
 
     private func getLocations() {
-        loading(isLoading: true)
-        viewModel.getStudents(uniqueKey: userId)
+        self.loading(isLoading: true)
+        self.viewModel.getStudents(uniqueKey: self.userId)
     }
 
     private func getUser() {
         let defaults = UserDefaults.standard
-        userId = defaults.string(forKey: "userLogged") ?? ""
+        self.userId = defaults.string(forKey: "userLogged") ?? ""
 
-        getLocations()
+        self.getLocations()
     }
 
     private func loading(isLoading: Bool) {
-        loadingView.isHidden = !isLoading
-        loadingIndicator.isHidden = !isLoading
-        isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
+        self.loadingView.isHidden = !isLoading
+        self.loadingIndicator.isHidden = !isLoading
+        isLoading ? self.loadingIndicator.startAnimating() : self.loadingIndicator.stopAnimating()
     }
 
     @objc func addLocationTapped() {
         print("add location tapped")
 
-        showAddLocation()
+        self.showAddLocation()
     }
 
     func showAddLocation() {
@@ -63,11 +64,11 @@ class MapViewController: UIViewController {
     }
 
     @objc func refreshTapped() {
-        getLocations()
+        self.getLocations()
     }
 
     @objc func logoutTapped() {
-        viewModel.logout()
+        self.viewModel.logout()
     }
 
     private func setupNavigationBar() {
@@ -85,35 +86,65 @@ class MapViewController: UIViewController {
     }
 
     private func setupMapWithResponse(result: StudentResponse) {
-        mapView.removeAnnotations(mapView.annotations)
+        self.mapView.removeAnnotations(self.mapView.annotations)
         for pin in result.results ?? [] {
             let annotation = MKPointAnnotation()
             annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude ?? 0, longitude: pin.longitude ?? 0)
             annotation.title = "\(String(describing: pin.firstName!)) \(String(describing: pin.lastName!))"
             annotation.subtitle = pin.mediaURL
 
-            mapView.addAnnotation(annotation)
+            self.mapView.addAnnotation(annotation)
         }
     }
 }
 
 extension MapViewController: TabBarViewModelProtocol {
     func getStudents(result: StudentResponse) {
-        loading(isLoading: false)
+        self.loading(isLoading: false)
         self.setupMapWithResponse(result: result)
     }
 
     func didLogout() {
         self.dismiss(animated: true, completion: nil)
     }
+
+    func didError(message: String) {
+        self.loading(isLoading: false)
+        self.alertError(message: message)
+    }
+
+    private func alertError(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
 extension MapViewController: MKMapViewDelegate {
+
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+
         let app = UIApplication.shared
         if let toOpen = view.annotation?.subtitle! {
-            app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
+            app.canOpenURL(URL(string: toOpen)!)
+                ? app.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
+                : self.alertError(message: "User has no associated link")
         }
+    }
+
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+
+        let identifier = "Placemark"
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+
+        if annotationView == nil {
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            annotationView?.canShowCallout = true
+            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        } else {
+            annotationView?.annotation = annotation
+        }
+        return annotationView
     }
 }
 

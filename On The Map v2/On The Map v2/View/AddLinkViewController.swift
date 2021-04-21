@@ -26,44 +26,55 @@ class AddLinkViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewModel.delegate = self
+        self.viewModel.delegate = self
 
-        setupUI()
-        setupLocationManager()
-        searchLocation()
+        self.setupUI()
+        self.setupLocationManager()
+        self.markAnnotation(placemark: self.selectedPin!)
 
-        getUser()
+        self.getUser()
+
+        self.dismissView()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.subscribeToKeyboardNotifications()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.unsubscribeFromKeyboardNotifications()
     }
 
     private func getUser() {
         let defaults = UserDefaults.standard
-        userId = defaults.string(forKey: "userLogged") ?? ""
-        viewModel.getUserById(id: userId)
+        self.userId = defaults.string(forKey: "userLogged") ?? ""
+        self.viewModel.getUserById(id: self.userId)
     }
 
     private func setupUI() {
-        setupButtonUI()
-        setupTextFieldUI()
+        self.setupButtonUI()
+        self.setupTextFieldUI()
     }
 
     private func setupTextFieldUI() {
-        linkTextField.textColor = .white
-        linkTextField.attributedPlaceholder = NSAttributedString(string: "Enter a link to shared here",
+        self.linkTextField.textColor = .white
+        self.linkTextField.attributedPlaceholder = NSAttributedString(string: "Enter a link to shared here",
                                      attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
     }
-
 
     @IBAction func submitButtonTapped(_ sender: Any) {
 
         let submitStudent = Student(
-            firstName: currentUser?.firstName,
-            lastName: currentUser?.lastName,
-            latitude: selectedPin?.coordinate.latitude,
-            longitude: selectedPin?.coordinate.longitude,
-            mapString: location, mediaURL: linkTextField.text,
-            uniqueKey: userId, objectId: nil, createdAt: nil, updatedAt: nil)
+            firstName: self.currentUser?.firstName,
+            lastName: self.currentUser?.lastName,
+            latitude: self.selectedPin?.coordinate.latitude,
+            longitude: self.selectedPin?.coordinate.longitude,
+            mapString: self.location, mediaURL: self.linkTextField.text,
+            uniqueKey: self.userId, objectId: nil, createdAt: nil, updatedAt: nil)
 
-        viewModel.postStudentLocation(student: submitStudent)
+        self.viewModel.postStudentLocation(student: submitStudent)
     }
 
     @IBAction func cancelButtonTapped(_ sender: Any) {
@@ -71,37 +82,21 @@ class AddLinkViewController: UIViewController {
     }
 
     private func setupButtonUI() {
-        submitButton.layer.cornerRadius = 5
+        self.submitButton.layer.cornerRadius = 5
 
     }
 
     private func markAnnotation(placemark: MKPlacemark) {
-        selectedPin = placemark
+        self.selectedPin = placemark
 
-        mapView.removeAnnotations(mapView.annotations)
+        self.mapView.removeAnnotations(self.mapView.annotations)
         let annotation = MKPointAnnotation()
         annotation.coordinate = placemark.coordinate
         annotation.title = placemark.name
-        mapView.addAnnotation(annotation)
+        self.mapView.addAnnotation(annotation)
         let span = MKCoordinateSpan(latitudeDelta: 0.25, longitudeDelta: 0.25)
         let region = MKCoordinateRegion(center: placemark.coordinate, span: span)
-        mapView.setRegion(region, animated: true)
-    }
-
-    private func searchLocation() {
-
-        let request = MKLocalSearch.Request()
-        request.naturalLanguageQuery = location
-        request.region = mapView.region
-        let search = MKLocalSearch(request: request)
-        search.start { [self] response, _ in
-            guard let response = response else {
-                return
-            }
-
-            let selectedItem = response.mapItems.first?.placemark
-            self.markAnnotation(placemark: selectedItem!)
-        }
+        self.mapView.setRegion(region, animated: true)
     }
 }
 
@@ -113,7 +108,7 @@ extension AddLinkViewController : CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse {
-            locationManager.requestLocation()
+            self.locationManager.requestLocation()
         }
     }
 
@@ -121,19 +116,23 @@ extension AddLinkViewController : CLLocationManagerDelegate {
         if let location = locations.first {
             let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
-            mapView.setRegion(region, animated: true)
+            self.mapView.setRegion(region, animated: true)
         }
     }
 
     private func setupLocationManager() {
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.requestLocation()
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.requestLocation()
     }
 }
 
 extension AddLinkViewController: AddLinkViewModelProtocol {
+    func didError(message: String) {
+        self.alertError(message: message)
+    }
+
     func didStudentPosted() {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "TabBarViewController") as! TabBarViewController
@@ -142,6 +141,50 @@ extension AddLinkViewController: AddLinkViewModelProtocol {
     }
 
     func didUser(user: UserInformation) {
-        currentUser = user
+        self.currentUser = user
+    }
+
+    private func alertError(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+}
+
+extension AddLinkViewController {
+
+    private func dismissView() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+
+    private func subscribeToKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    private func unsubscribeFromKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc func keyboardWillShow(_ notification:Notification) {
+        if view.frame.origin.y == 0 {
+            view.frame.origin.y -= (self.getKeyboardHeight(notification) / 3)
+        }
+    }
+
+    @objc func keyboardWillHide(_ notification:Notification) {
+        view.frame.origin.y = 0
+    }
+
+    private func getKeyboardHeight(_ notification:Notification) -> CGFloat {
+        let userInfo = notification.userInfo
+        let keyboardSize = userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue
+        return keyboardSize.cgRectValue.height
+    }
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

@@ -32,6 +32,7 @@
 		BF5EC505262D8031000B10E8 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5EC504262D8031000B10E8 /* TableViewController.swift */; };
 		BF5EC508262D803F000B10E8 /* AddLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5EC507262D803F000B10E8 /* AddLocationViewController.swift */; };
 		BF5EC50B262D8052000B10E8 /* AddLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5EC50A262D8052000B10E8 /* AddLinkViewController.swift */; };
+		BF5EC77226309E9D000B10E8 /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5EC77126309E9D000B10E8 /* ErrorResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		BF5EC504262D8031000B10E8 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		BF5EC507262D803F000B10E8 /* AddLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationViewController.swift; sourceTree = "<group>"; };
 		BF5EC50A262D8052000B10E8 /* AddLinkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLinkViewController.swift; sourceTree = "<group>"; };
+		BF5EC77126309E9D000B10E8 /* ErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 				BF5EC4E2262D7C4A000B10E8 /* Student.swift */,
 				BF5EC4E5262D7C56000B10E8 /* StudentResponse.swift */,
 				BF5EC4E8262D7C61000B10E8 /* UserInformation.swift */,
+				BF5EC77126309E9D000B10E8 /* ErrorResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -254,6 +257,7 @@
 				BF5EC4D4262D7C02000B10E8 /* Authentication.swift in Sources */,
 				BF5EC4FC262D7FDC000B10E8 /* LoginViewController.swift in Sources */,
 				BF5EC4D0262D7BF2000B10E8 /* Udacity.swift in Sources */,
+				BF5EC77226309E9D000B10E8 /* ErrorResponse.swift in Sources */,
 				BF5EC4EF262D7D8F000B10E8 /* TabBarViewModel.swift in Sources */,
 				BF5EC4E0262D7C3D000B10E8 /* Session.swift in Sources */,
 			);

@@ -21,40 +21,41 @@ class TableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        myTableView.register(MyTableViewCell.nib(), forCellReuseIdentifier: MyTableViewCell.reuseIdentifier)
+        self.myTableView.register(MyTableViewCell.nib(), forCellReuseIdentifier: MyTableViewCell.reuseIdentifier)
 
-        myTableView.delegate = self
-        myTableView.dataSource = self
-        viewModel.delegate = self
+        self.myTableView.delegate = self
+        self.myTableView.dataSource = self
+        self.viewModel.delegate = self
 
-        setupNavigationBar()
-        getUser()
+        self.setupNavigationBar()
+        self.getUser()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        getUser()
+        super.viewWillAppear(animated)
+        self.getUser()
     }
 
     private func getUser() {
         let defaults = UserDefaults.standard
-        userId = defaults.string(forKey: "userLogged") ?? ""
+        self.userId = defaults.string(forKey: "userLogged") ?? ""
 
-        getLocations()
+        self.getLocations()
     }
 
     private func getLocations() {
-        loading(isLoading: true)
-        viewModel.getStudents(uniqueKey: userId)
+        self.loading(isLoading: true)
+        self.viewModel.getStudents(uniqueKey: userId)
     }
 
     private func loading(isLoading: Bool) {
-        loadingView.isHidden = !isLoading
-        loadingIndicator.isHidden = !isLoading
-        isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
+        self.loadingView.isHidden = !isLoading
+        self.loadingIndicator.isHidden = !isLoading
+        isLoading ? self.loadingIndicator.startAnimating() : self.loadingIndicator.stopAnimating()
     }
 
     @objc func addLocationTapped() {
-        showAddLocation()
+        self.showAddLocation()
     }
 
     func showAddLocation() {
@@ -65,11 +66,11 @@ class TableViewController: UIViewController {
     }
 
     @objc func refreshTapped() {
-        getLocations()
+        self.getLocations()
     }
 
     @objc func logoutTapped() {
-        viewModel.logout()
+        self.viewModel.logout()
     }
 
     private func setupNavigationBar() {
@@ -87,8 +88,8 @@ class TableViewController: UIViewController {
     }
 
     private func setupMapWithResponse(result: StudentResponse) {
-        tableList = result.results ?? []
-        myTableView.reloadData()
+        self.tableList = result.results ?? []
+        self.myTableView.reloadData()
     }
 }
 
@@ -101,12 +102,12 @@ extension TableViewController: UITableViewDelegate {
 
 extension TableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableList.count
+        return self.tableList.count
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let student = tableList[indexPath.row]
+        let student = self.tableList[indexPath.row]
 
         let app = UIApplication.shared
         if let toOpen = student.mediaURL {
@@ -123,12 +124,23 @@ extension TableViewController: UITableViewDataSource {
 
 extension TableViewController: TabBarViewModelProtocol {
     func getStudents(result: StudentResponse) {
-        loading(isLoading: false)
+        self.loading(isLoading: false)
         self.setupMapWithResponse(result: result)
     }
 
     func didLogout() {
         self.dismiss(animated: true, completion: nil)
+    }
+
+    func didError(message: String) {
+        self.loading(isLoading: false)
+        self.alertError(message: message)
+    }
+
+    private func alertError(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }
 

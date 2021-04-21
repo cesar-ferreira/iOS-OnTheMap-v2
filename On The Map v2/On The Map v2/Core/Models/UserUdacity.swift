@@ -9,7 +9,7 @@ import Foundation
 
 struct UserUdacity: Codable {
 
-    let account: Account?
-    let session: Session?
+    let account: Account
+    let session: Session
 
 }

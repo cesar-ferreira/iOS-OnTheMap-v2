@@ -11,6 +11,7 @@ import UIKit
 protocol AddLinkViewModelProtocol: class {
     func didUser(user: UserInformation)
     func didStudentPosted()
+    func didError(message: String)
 }
 
 class AddLinkViewModel {
@@ -21,7 +22,10 @@ class AddLinkViewModel {
         let request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/users/\(id)")!)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error...
+            if error != nil {
+                DispatchQueue.main.async {
+                    self.delegate?.didError(message: error.debugDescription)
+                }
                 return
             }
             let range: Range = 5..<data!.count
@@ -32,10 +36,15 @@ class AddLinkViewModel {
                     self.delegate?.didUser(user: results)
                 }
             } catch {
-                print("Error Parse")
+                do {
+                    let results = try JSONDecoder().decode(ErrorResponse.self, from: newData!)
+                    DispatchQueue.main.async {
+                        self.delegate?.didError(message: results.error)
+                    }
+                } catch {
+                    print("Error Parse")
+                }
             }
-
-            print(String(data: newData!, encoding: .utf8)!)
         }
         task.resume()
     }
@@ -53,16 +62,17 @@ class AddLinkViewModel {
             print("Error Parse")
         }
 
-//        request.httpBody = "{\"uniqueKey\": \"1234\", \"firstName\": \"John\", \"lastName\": \"Doe\",\"mapString\": \"Mountain View, CA\", \"mediaURL\": \"https://udacity.com\",\"latitude\": 37.386052, \"longitude\": -122.083851}".data(using: .utf8)
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error…
+            if error != nil {
+                DispatchQueue.main.async {
+                    self.delegate?.didError(message: error.debugDescription)
+                }
                 return
             }
             DispatchQueue.main.async {
                 self.delegate?.didStudentPosted()
             }
-            print(String(data: data!, encoding: .utf8)!)
         }
         task.resume()
     }

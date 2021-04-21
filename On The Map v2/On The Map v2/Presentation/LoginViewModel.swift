@@ -10,6 +10,7 @@ import UIKit
 
 protocol LoginViewModelProtocol: class {
     func didLogin()
+    func didError(message: String)
 }
 
 class LoginViewModel {
@@ -36,7 +37,8 @@ class LoginViewModel {
 
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error…
+
+            if error != nil {
                 return
             }
 
@@ -44,14 +46,21 @@ class LoginViewModel {
             let newData = data?.subdata(in: range)
             do {
                 let results = try JSONDecoder().decode(UserUdacity.self, from: newData!)
-                UserDefaults.standard.set(results.account?.key, forKey: "userLogged")
-                print(String(data: newData!, encoding: .utf8)!)
+                UserDefaults.standard.set(results.account.key, forKey: "userLogged")
                 DispatchQueue.main.async {
                     self.delegate?.didLogin()
                 }
 
             } catch {
-                print("Error Parse")
+                do {
+                    let results = try JSONDecoder().decode(ErrorResponse.self, from: newData!)
+                    DispatchQueue.main.async {
+                        self.delegate?.didError(message: results.error)
+                    }
+                } catch {
+                    print("Error Parse")
+
+                }
             }
         }
         task.resume()
